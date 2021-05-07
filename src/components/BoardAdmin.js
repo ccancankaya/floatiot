@@ -1,8 +1,10 @@
+/* eslint-disable no-useless-concat */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import DateTimePicker from 'react-datetime-picker';
 import UserService from "../services/user.service";
+import './BoardAdmin.css'
 
 const BoardAdmin = () => {
 
@@ -12,16 +14,14 @@ const BoardAdmin = () => {
   const [from, onFrom] = useState(new Date());
   const [pressure, onSetPressure] = useState()
 
-
-  useEffect(() => {
-    // onSetPressure(1)
+  window.onload = function (e) {
     UserService.getAdminBoard(1, 1).then(function (response) {
       var data = JSON.stringify(response.data)
       var data2 = JSON.parse(data)
 
       var data3 = data2.map(item => {
         let robj = {}
-        robj.value = (item.value - 4).toString() + " bar"
+        robj.value = Math.abs((item.value - 4).toString()) + " bar"
         robj.time = new Date(item.time).toLocaleString("tr-TR")
 
         return robj
@@ -33,7 +33,9 @@ const BoardAdmin = () => {
         console.log(error);
       });
 
-  }, []);
+      setInterval(()=>window.location.reload(),15*60*1000)
+     
+  }
 
 
   useEffect(() => {
@@ -72,46 +74,33 @@ const BoardAdmin = () => {
 
   }, [pressure]);
 
-  function getFromDate(){
-    var time=toStart.getHours()
-    var time3=from.getHours()
-    var time4
-    var time2
-    var date1
-    var date2
-    if(time.toString().length===1){
-        time2='0'+time.toString()
-        date1=toStart.getFullYear().toString()+'-'+'0'+(toStart.getMonth()+1).toString()+'-'+
-        '0'+toStart.getDate().toString()+'T'+time2+'%'+'3A'+toStart.getMinutes().toString()+'%'+'3A'+'00'+'%'+'2B00'+'%'+
-        '3A00'
-        console.log(date1)
-        // new Date().getMinutes().toString()+'+03:00'
-    }else{
-         date1=toStart.getFullYear().toString()+'-'+'0'+(toStart.getMonth()+1).toString()+'-'+
-        toStart.getDate().toString()+'T'+toStart.getHours().toString()+'%'+'3A'+toStart.getMinutes().toString()+'%'+'3A'+'00'+'%'+'2B00'+'%'+
-        '3A00'
+
+  function getFromDate() {
+    var firstDateTime
+    var lastDateTime
+
+    const decisionDigit= function(abc){
+      if (abc.length === 1) {
+        return '0' + abc;
+      } else {
+        return abc;
+      }
     }
 
-    if(time3.toString().length===1){
-      time4='0'+time.toString()
-      date2=from.getFullYear().toString()+'-'+'0'+(from.getMonth()+1).toString()+'-'+
-      '0'+from.getDate().toString()+'T'+time4+'%'+'3A'+from.getMinutes().toString()+'%'+'3A'+'00'+'%'+'2B00'+'%'+
+
+    firstDateTime = toStart.getFullYear().toString() + '-' + '0' + (toStart.getMonth() + 1).toString() + '-' + decisionDigit(toStart.getDate().toString()) + 'T' + decisionDigit(toStart.getHours().toString()) + '%' + '3A' + toStart.getMinutes().toString() + '%' + '3A' + '00' + '%' + '2B00' + '%' +
       '3A00'
-      console.log(date2)
-      // new Date().getMinutes().toString()+'+03:00'
-  }else{
-       date2=from.getFullYear().toString()+'-'+'0'+(from.getMonth()+1).toString()+'-'+
-      from.getDate().toString()+'T'+from.getHours().toString()+'%'+'3A'+from.getMinutes().toString()+'%'+'3A'+'00'+'%'+'2B00'+'%'+
+
+    lastDateTime = from.getFullYear().toString() + '-' + '0' + (from.getMonth() + 1).toString() + '-' + decisionDigit(from.getDate().toString()) + 'T' + decisionDigit(from.getHours().toString()) + '%' + '3A' + from.getMinutes().toString() + '%' + '3A' + '00' + '%' + '2B00' + '%' +
       '3A00'
-  }
-    console.log(date2)
-    UserService.getAdminBoard(date1, date2).then(function (response) {
+
+    UserService.getAdminBoard(firstDateTime, lastDateTime).then(function (response) {
       var data = JSON.stringify(response.data)
       var data2 = JSON.parse(data)
 
       var data3 = data2.map(item => {
         let robj = {}
-        robj.value = (item.value - 4).toString() + " bar"
+        robj.value = Math.abs((item.value - 4)).toString() + " bar"
         robj.time = new Date(item.time).toLocaleString("tr-TR")
 
         return robj
@@ -124,58 +113,6 @@ const BoardAdmin = () => {
       });
   }
 
-  // useEffect(() => {
-  //   var time=toStart.getHours()
-  //   var time3=from.getHours()
-  //   var time4
-  //   var time2
-  //   var date1
-  //   var date2
-  //   if(time.toString().length===1){
-  //       time2='0'+time.toString()
-  //       date1=toStart.getFullYear().toString()+'-'+'0'+(toStart.getMonth()+1).toString()+'-'+
-  //       '0'+toStart.getDate().toString()+'T'+time2+'%'+'3A'+toStart.getMinutes().toString()+'%'+'3A'+'00'+'%'+'2B00'+'%'+
-  //       '3A00'
-  //       console.log(date1)
-  //       // new Date().getMinutes().toString()+'+03:00'
-  //   }else{
-  //        date1=toStart.getFullYear().toString()+'-'+'0'+(toStart.getMonth()+1).toString()+'-'+
-  //       '0'+toStart.getDate().toString()+'T'+toStart.getHours().toString()+'%'+'3A'+toStart.getMinutes().toString()+'%'+'3A'+'00'+'%'+'2B00'+'%'+
-  //       '3A00'
-  //   }
-
-  //   if(time3.toString().length===1){
-  //     time4='0'+time.toString()
-  //     date2=from.getFullYear().toString()+'-'+'0'+(from.getMonth()+1).toString()+'-'+
-  //     '0'+from.getDate().toString()+'T'+time4+'%'+'3A'+from.getMinutes().toString()+'%'+'3A'+'00'+'%'+'2B00'+'%'+
-  //     '3A00'
-  //     console.log(date2)
-  //     // new Date().getMinutes().toString()+'+03:00'
-  // }else{
-  //      date2=from.getFullYear().toString()+'-'+'0'+(from.getMonth()+1).toString()+'-'+
-  //     '0'+from.getDate().toString()+'T'+from.getHours().toString()+'%'+'3A'+from.getMinutes().toString()+'%'+'3A'+'00'+'%'+'2B00'+'%'+
-  //     '3A00'
-  // }
-  //   console.log(date2)
-  //   UserService.getAdminBoard(date1, date2).then(function (response) {
-  //     var data = JSON.stringify(response.data)
-  //     var data2 = JSON.parse(data)
-
-  //     var data3 = data2.map(item => {
-  //       let robj = {}
-  //       robj.value = (item.value - 4).toString() + " bar"
-  //       robj.time = new Date(item.time).toLocaleString("tr-TR")
-
-  //       return robj
-
-  //     })
-  //     setData(data3)
-  //   })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-
-  // }, [toStart, from]);
 
   const columns = [
     { label: 'Değer', name: 'value' },
@@ -221,14 +158,17 @@ const BoardAdmin = () => {
           </div>
         </div>
         <div className="col-md-2">
-          <button className="btn btn-success" type="button" onClick={()=>getFromDate()}>Filtrele</button>
+          <button className="btn btn-success" type="button" onClick={() => getFromDate()}>Filtrele</button>
         </div>
       </div>
-      <MUIDataTable
-        columns={columns}
-        data={data}
-        title={tableName === '' ? 'Analog Input' : tableName}
-      />
+
+        <MUIDataTable
+          columns={columns}
+          data={data}
+          title={tableName === '' ? 'Analog Input' : tableName}
+        />
+
+
     </div>
   )
 };

@@ -1,0 +1,34 @@
+.MUIDataTableHeadCell-fixedHeader-51 {
+  z-index: unset !important;
+}
+
+.MuiToolbar-root {
+  background-color: #2a323d !important;
+  color: white !important;
+}
+
+.MuiIconButton-root {
+  color: white !important;
+}
+
+.MuiTable-root {
+  background-color: #2a323d !important;
+}
+
+.MuiTableCell-body {
+  color: white !important;
+}
+.MuiTableRow-root MUIDataTableHeadRow-root-34 MuiTableRow-head {
+  background-color: #2a323d !important;
+}
+.MuiSelect-icon {
+  color: white !important;
+}
+
+.react-datetime-picker{
+    color:black!important;
+}
+
+.react-datetime-picker__inputGroup__input{
+    color: white;
+}
